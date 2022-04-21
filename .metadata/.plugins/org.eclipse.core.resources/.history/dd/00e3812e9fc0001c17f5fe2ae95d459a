@@ -1,0 +1,5 @@
+package com.shopping.app.orders.model;
+
+public class OrderReview {
+
+}

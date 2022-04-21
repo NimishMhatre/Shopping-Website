@@ -1,0 +1,40 @@
+package com.shopping.app.orders.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.shopping.app.orders.model.Order;
+import com.shopping.app.orders.repository.OrderRepository;
+
+
+@RestController
+@RequestMapping("/order")
+public class OrderController {
+	
+	@Autowired
+	private OrderRepository repository;
+	
+	@PostMapping("/bookOrder")
+	public Order bookOrder(@RequestBody Order order) {
+		return repository.save(order);
+	}
+
+	@GetMapping("/getAllOrders")
+	public List<Order> getOrders(){
+		return repository.findAll();
+	}
+	
+	@GetMapping("/getOrders/{Userid}")
+	public List<Order> getById(@PathVariable int Userid){
+		return repository.findByUserid(Userid);
+	}
+	
+}

@@ -1,0 +1,64 @@
+package com.shopping.app.users.controllers;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.shopping.app.users.model.Address;
+import com.shopping.app.users.model.User;
+import com.shopping.app.users.repository.AddressRepository;
+import com.shopping.app.users.repository.UserRepository;
+
+@RestController
+@RequestMapping("/users")
+public class UsersController {
+	
+	@Autowired
+	private UserRepository repository;
+	
+	@Autowired
+	private AddressRepository repo;
+	
+	@PostMapping("/register")
+	public String registerUser(@RequestBody User user){
+		repository.save(user);
+		return user.getUserName() + " is registered sucessfully";
+	}
+	
+	@PostMapping("/saveAddress")
+	public Address saveAddress(@RequestBody Address address) {
+		repo.save(address);
+		return address;
+	}
+	
+	@GetMapping("/Address/{userid}")
+	public List<Address> getAddress(@PathVariable int userid){
+		return repo.findByUserid(userid);
+	}
+	
+	
+	@GetMapping("/getAllUser")
+	public List<User> getUser(){
+		return repository.findAll();
+	}
+	
+	@GetMapping("/getAllUser/{id}")
+	public Optional<User> getUser(@PathVariable int id){
+		return repository.findById(id);
+	}
+	
+	@DeleteMapping("/delete/{id}")
+	public String deleteUser(@PathVariable int id) {
+		repository.deleteById(id);
+		return "User deleted with id : "+ id;
+	}
+
+}

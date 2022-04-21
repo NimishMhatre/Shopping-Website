@@ -1,0 +1,5 @@
+package com.shopping.app.orders.common;
+
+public class Payment {
+
+}

@@ -1,0 +1,19 @@
+package com.shopping.app.orders.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.shopping.app.orders.model.Order;
+import com.shopping.app.orders.repository.OrderRepository;
+
+@Service
+public class OrderService {
+
+	@Autowired
+	private OrderRepository repository;
+
+
+	public Order saveOrder(Order order) {
+		return repository.save(order);
+	}
+
+}
