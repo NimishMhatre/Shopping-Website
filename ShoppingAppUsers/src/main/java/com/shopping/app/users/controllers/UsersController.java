@@ -14,9 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shopping.app.users.model.Address;
+import com.shopping.app.users.model.Order;
+import com.shopping.app.users.model.OrderReview;
+import com.shopping.app.users.model.Payment;
 import com.shopping.app.users.model.Product;
 import com.shopping.app.users.model.User;
 import com.shopping.app.users.repository.AddressRepository;
+import com.shopping.app.users.repository.OrderServiceClient;
+import com.shopping.app.users.repository.PaymentServiceClient;
 import com.shopping.app.users.repository.ProductRepository;
 import com.shopping.app.users.repository.UserRepository;
 
@@ -25,7 +30,7 @@ import com.shopping.app.users.repository.UserRepository;
 public class UsersController {
 	
 	@Autowired
-	private static UserRepository repository;
+	private UserRepository repository;
 	
 	@Autowired
 	private AddressRepository repo;
@@ -33,10 +38,36 @@ public class UsersController {
 	@Autowired
 	private ProductRepository prodrepo;
 	
+	@Autowired
+	private OrderServiceClient orderClient;
+	
+	@Autowired
+	private PaymentServiceClient paymentClient;
+	
 	@PostMapping("/register")
 	public String registerUser(@RequestBody User user){
 		repository.save(user);
 		return user.getUserName() + " is registered sucessfully";
+	}
+	
+	@PostMapping("/BookOrder")
+	public Order BookOrder(@RequestBody Order order) {
+		return orderClient.bookOrder(order);
+	}
+	
+	@PostMapping("/order/review")
+	public OrderReview giveReview(@RequestBody OrderReview orderReview) {
+		return orderClient.addReview(orderReview);
+	}
+	
+	@GetMapping("/getOrders/{userid}")
+	public List<Order> getById(@PathVariable int userid){
+		return orderClient.getById(userid);
+	}
+	
+	@PostMapping("/makePayment")
+	public Payment makePayment(@RequestBody Payment payment) {
+		return paymentClient.doPaymnet(payment);
 	}
 	
 	@PostMapping("/saveAddress")
@@ -68,7 +99,7 @@ public class UsersController {
 		return prodrepo.findAll();
 	}
 	
-	@GetMapping("/getAllUser/{id}")
+	@GetMapping("/getUser/{id}")
 	public Optional<User> getUser(@PathVariable int id){
 		return repository.findById(id);
 	}

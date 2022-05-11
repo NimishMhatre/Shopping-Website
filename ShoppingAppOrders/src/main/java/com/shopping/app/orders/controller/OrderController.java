@@ -32,7 +32,7 @@ public class OrderController {
 		return repository.save(order);
 	}
 	
-	@PostMapping("/review")
+	@PostMapping("/order/review")
 	public OrderReview addReview(@RequestBody OrderReview orderReview) {
 		orderReview.setId(UUID.randomUUID().toString());
 		return repo.save(orderReview);
